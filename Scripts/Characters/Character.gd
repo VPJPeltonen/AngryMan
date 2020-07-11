@@ -13,6 +13,8 @@ func _ready():
 func damage(damage_done):
 	health -= damage_done
 	$Sprite.show_damage()
+	if health <= 0:
+		queue_free()
 
 func _on_Feet_body_entered(body):
 	if body.is_in_group("ground"):

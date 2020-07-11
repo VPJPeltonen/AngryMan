@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scripts/Effects/Beam.gd" type="Script" id=1]
+[ext_resource path="res://sprites/Effects/crackle.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 177.481, 10 )
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 0.993182 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.0477272 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=3]
+min_value = -1.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.948276, 0.763636 ), 0.0, 0.0, 0, 0 ]
+
+[node name="Beam" type="Node2D"]
+position = Vector2( -0.834638, 3.67087 )
+z_index = -1
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+margin_left = 3.0
+margin_top = -10.0
+margin_right = 356.0
+margin_bottom = 9.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( 3, -10 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 175.408, 10.3181 )
+shape = SubResource( 1 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2( 179.579, 2.11891 )
+amount = 600
+local_coords = false
+texture = ExtResource( 2 )
+emission_shape = 2
+emission_rect_extents = Vector2( 170, 1 )
+gravity = Vector2( 0, -50 )
+scale_amount = 0.1
+scale_amount_random = 0.5
+scale_amount_curve = SubResource( 2 )
+color = Color( 1, 0, 0, 1 )
+hue_variation_curve = SubResource( 3 )
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
