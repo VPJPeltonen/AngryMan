@@ -6,7 +6,6 @@ var blinking = false
 
 func _process(delta):
 	if blinking:
-		
 		if blinks >= 8:
 			blinking = false
 			blink_counter = 0

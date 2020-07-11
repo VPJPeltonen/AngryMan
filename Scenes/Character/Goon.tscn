@@ -1,0 +1,67 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Scripts/Characters/Goon.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Characters/Sprites/Sprite_controller.gd" type="Script" id=2]
+[ext_resource path="res://sprites/Goon/goon_walk2_stand.png" type="Texture" id=3]
+[ext_resource path="res://sprites/Goon/goon_walk1.png" type="Texture" id=4]
+[ext_resource path="res://sprites/Goon/goon_walk3.png" type="Texture" id=5]
+[ext_resource path="res://sprites/Goon/goon_shoot.png" type="Texture" id=6]
+
+[sub_resource type="CapsuleShape2D" id=1]
+height = 13.2018
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 4 ), ExtResource( 3 ), ExtResource( 5 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "shoot",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 218.498, 10 )
+
+[sub_resource type="CircleShape2D" id=3]
+
+[node name="Goon" type="KinematicBody2D"]
+position = Vector2( 449.451, 490.208 )
+z_index = 1
+script = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -0.520264, -0.817566 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+modulate = Color( 1, 0.560784, 0, 1 )
+position = Vector2( 0.117963, -0.471918 )
+frames = SubResource( 2 )
+animation = "shoot"
+playing = true
+script = ExtResource( 2 )
+
+[node name="aimzone" type="Area2D" parent="Sprite"]
+position = Vector2( -0.742645, -5.3114 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/aimzone"]
+position = Vector2( 222.496, 1.90418 )
+shape = SubResource( 4 )
+
+[node name="barrel" type="Position2D" parent="Sprite"]
+position = Vector2( 16.7335, -5.43393 )
+
+[node name="Feet" type="Area2D" parent="."]
+position = Vector2( -0.624683, -5.78332 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Feet"]
+position = Vector2( 0.420441, 12.6135 )
+shape = SubResource( 3 )
+[connection signal="body_entered" from="Sprite/aimzone" to="." method="_on_aimzone_body_entered"]
+[connection signal="body_exited" from="Sprite/aimzone" to="." method="_on_aimzone_body_exited"]
+[connection signal="body_entered" from="Feet" to="." method="_on_Feet_body_entered"]
+[connection signal="body_exited" from="Feet" to="." method="_on_Feet_body_exited"]

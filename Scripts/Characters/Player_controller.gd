@@ -27,6 +27,8 @@ var active_boost = "none"
 
 var power_blast = preload("res://Scenes/Effects/PowerBlast.tscn")
 
+var dead = false
+
 func _ready():
 	player = true
 	add_to_group("characters")
@@ -37,6 +39,8 @@ func _ready():
 	emit_signal("power_used","",current_off_power,"off")
 	
 func _process(delta):
+	if dead:
+		return
 	move(delta)
 	if Input.is_action_just_pressed("use_power1") and def_power_cooldown <= 0:
 		power("def")
@@ -120,3 +124,11 @@ func move(delta):
 	move_dir = move_dir.linear_interpolate(Vector2(0,0), delta*6)
 	move_and_slide(move_dir)
 	$Sprite.set_state(move_state,move_dir)
+
+func die():
+	$Sprite.hide()
+	dead = true
+
+func _on_forcefield_area_area_shape_entered(area_id, area, area_shape, self_shape):
+	if area.is_in_group("projectile") and active_boost == "force field" and boost_active:
+		area.get_parent().queue_free()
