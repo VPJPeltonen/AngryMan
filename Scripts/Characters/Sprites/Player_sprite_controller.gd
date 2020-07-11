@@ -1,4 +1,4 @@
-extends AnimatedSprite
+extends "res://Scripts/Characters/Sprites/Sprite_controller.gd"
 
 func set_state(state,dir):
 	set_animation(state)
@@ -10,3 +10,4 @@ func set_state(state,dir):
 		set_animation("up")
 	elif dir.y > 50:
 		set_animation("fall")
+

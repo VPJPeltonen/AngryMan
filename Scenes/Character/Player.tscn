@@ -1,0 +1,88 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://sprites/angryman_air_down.png" type="Texture" id=1]
+[ext_resource path="res://sprites/angryman_air_up.png" type="Texture" id=2]
+[ext_resource path="res://sprites/angryman_air_down2.png" type="Texture" id=3]
+[ext_resource path="res://sprites/angryman_air_up2.png" type="Texture" id=4]
+[ext_resource path="res://Scripts/Characters/Player_controller.gd" type="Script" id=5]
+[ext_resource path="res://sprites/angryman_walk1.png" type="Texture" id=6]
+[ext_resource path="res://sprites/angryman_walk4.png" type="Texture" id=7]
+[ext_resource path="res://sprites/angryman_stand2.png" type="Texture" id=8]
+[ext_resource path="res://sprites/angryman_walk2.png" type="Texture" id=9]
+[ext_resource path="res://sprites/angryman_walk3.png" type="Texture" id=10]
+[ext_resource path="res://Scripts/Characters/Sprites/Player_sprite_controller.gd" type="Script" id=11]
+[ext_resource path="res://sprites/Effects/crackle.png" type="Texture" id=12]
+
+[sub_resource type="CapsuleShape2D" id=1]
+height = 9.18317
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "up",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "fall",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "stand",
+"speed": 1.0
+}, {
+"frames": [ ExtResource( 6 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 7 ), ExtResource( 10 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "walk",
+"speed": 50.0
+} ]
+
+[sub_resource type="CircleShape2D" id=3]
+
+[sub_resource type="Curve" id=4]
+max_value = 0.2
+_data = [ Vector2( 0, 0.2 ), 0.0, 0.0, 0, 0, Vector2( 0.982759, 0.0329545 ), 0.0, 0.0, 0, 0 ]
+
+[node name="Player" type="KinematicBody2D"]
+position = Vector2( 111.503, 481.29 )
+z_index = 1
+script = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -0.793694, -1.78583 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0.834638, -3.67087 )
+frames = SubResource( 2 )
+animation = "fall"
+frame = 1
+playing = true
+script = ExtResource( 11 )
+
+[node name="Feet" type="Area2D" parent="."]
+position = Vector2( -0.137695, 11.446 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Feet"]
+position = Vector2( -0.694489, -6.2504 )
+shape = SubResource( 3 )
+
+[node name="Speed_effect" type="CPUParticles2D" parent="."]
+show_behind_parent = true
+emitting = false
+amount = 100
+lifetime = 2.0
+randomness = 0.2
+local_coords = false
+texture = ExtResource( 12 )
+emission_shape = 2
+emission_rect_extents = Vector2( 5, 5 )
+direction = Vector2( 0, 0 )
+gravity = Vector2( 0, -5 )
+angular_velocity = 1.0
+scale_amount_random = 0.14
+scale_amount_curve = SubResource( 4 )
+[connection signal="body_entered" from="Feet" to="." method="_on_Feet_body_entered"]
+[connection signal="body_exited" from="Feet" to="." method="_on_Feet_body_exited"]
